@@ -4,7 +4,7 @@ import json
 import sys
 
 # ---------------- LOAD MODEL ----------------
-MODEL_PATH = "lgb_gender_model.pkl"
+MODEL_PATH = "lgb_gender_model (4).pkl"
 
 with open(MODEL_PATH, "rb") as f:
     model = pickle.load(f)
