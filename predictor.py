@@ -4,7 +4,7 @@ import json
 import sys
 
 # ---------------- LOAD MODEL ----------------
-MODEL_PATH = "lgb_gender_model (2).pkl"
+MODEL_PATH = "lgb_gender_model.pkl"
 
 with open(MODEL_PATH, "rb") as f:
     model = pickle.load(f)
@@ -16,10 +16,9 @@ def predict_gender(features: dict) -> dict:
     row = {col: features.get(col, 0) for col in MODEL_FEATURES}
     X = pd.DataFrame([row])
 
-    # Encode categoricals
+    # Convert ALL columns to numeric safely
     for col in X.columns:
-        if X[col].dtype == "object":
-            X[col] = X[col].astype("category").cat.codes
+        X[col] = pd.to_numeric(X[col], errors="coerce")
 
     X = X.fillna(0)
 
@@ -31,6 +30,7 @@ def predict_gender(features: dict) -> dict:
         "label": label,
         "female_probability": round(prob, 4)
     }
+
 
 
 # ---------------- ENTRY POINT FOR JS ----------------
