@@ -41,7 +41,7 @@ function predictGender(inputFeatures) {
 
 // ---------------- TEST ----------------
 const inputFeatures = {
-  'battery_level': 83, 'device_tier': 4, 'device_recency': 4, 'device_manufacturer': 'Samsung', 'visit_count': 11, 'device_name': 'Galaxy A55 5G', 'location_region': 'UP', 'location_country': 'IN', 'location_city_tier': 'Tier 2', 'associated_region': 'Northern Plains', 'os_version': '15.0.0', 'network_provider': 'Jio', 'internet_speed': '4g', 'channel': 'google', 'primary_language': 'en-IN', 'city': 'Delhi', 'person_score': 80
+  'battery_level': 83, 'device_tier': 4, 'device_recency': 4, 'device_manufacturer': 'Samsung', 'device_name': 'Galaxy A55 5G', 'location_region': 'UP', 'location_country': 'IN', 'location_city_tier': 'Tier 2', 'associated_region': 'Northern Plains', 'os_version': '15.0.0', 'network_provider': 'Jio', 'internet_speed': '4g', 'channel': 'google', 'primary_language': 'en-IN', 'city': 'Delhi', 'person_score': 80
 };
 
 predictGender(inputFeatures)
