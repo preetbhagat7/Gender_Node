@@ -2,14 +2,16 @@ const { PythonShell } = require("python-shell");
 
 function predictGender(inputFeatures) {
   return new Promise((resolve, reject) => {
+
     const options = {
       mode: "text",
       pythonOptions: ["-u"],
-      scriptPath: ".",
+      scriptPath: __dirname,   // safer than "."
       args: [JSON.stringify(inputFeatures)]
     };
 
     let output = "";
+    let errorOutput = "";
 
     const pyshell = new PythonShell("predictor.py", options);
 
@@ -17,48 +19,29 @@ function predictGender(inputFeatures) {
       output += message;
     });
 
+    pyshell.on("stderr", message => {
+      errorOutput += message;
+    });
+
     pyshell.end(err => {
-      if (err) return reject(err);
+      if (err) {
+        return reject("Python error: " + err.message + "\n" + errorOutput);
+      }
+
       try {
-        resolve(JSON.parse(output));
+        const parsed = JSON.parse(output.trim());
+        resolve(parsed);
       } catch (e) {
-        reject("Invalid JSON from Python: " + output);
+        reject("Invalid JSON from Python:\n" + output);
       }
     });
   });
 }
 
+
 // ---------------- TEST ----------------
 const inputFeatures = {
-  "s.brand": "w-for-women",
-  "device_tier": 4,
-  "device_name": "Reno10 Pro 5G",
-  "device_recency": 4,
-  "device_manufacturer": "Oppo",
-  "visit_count": 10,
-  "session_duration_sec": 64,
-  "channel": "facebook",
-  "location_city": "Varanasi",
-  "location_region": "UP",
-  "location_country": "IN",
-  "location_city_tier": "Tier 3",
-  "is_bounced": 0,
-  "is_engaged": 1,
-  "person_score": 80,
-  "intent_score": 61,
-  "os_name": "Android",
-  "os_version": "15.0.0",
-  "network_provider": "Jio",
-  "internet_speed": "4g",
-  "battery_level": 74,
-  "is_battery_charging": 0,
-  "primary_language": "en-GB",
-  "associated_region": "Northern Plains",
-  "is_engaged_session": 1,
-  "is_bounced_session": 0,
-  "hour_key": 0,
-  "is_returned": 0,
-  "session_intensity": 0
+  'battery_level': 83, 'device_tier': 4, 'device_recency': 4, 'device_manufacturer': 'Samsung', 'visit_count': 11, 'device_name': 'Galaxy A55 5G', 'location_region': 'UP', 'location_country': 'IN', 'location_city_tier': 'Tier 2', 'associated_region': 'Northern Plains', 'os_version': '15.0.0', 'network_provider': 'Jio', 'internet_speed': '4g', 'channel': 'google', 'primary_language': 'en-IN', 'city': 'Delhi', 'person_score': 80
 };
 
 predictGender(inputFeatures)

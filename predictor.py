@@ -4,12 +4,12 @@ import json
 import sys
 
 # ---------------- LOAD MODEL ----------------
-MODEL_PATH = "lgb_gender_model (4).pkl"
+MODEL_PATH = "xgb_gender_model.pkl"
 
 with open(MODEL_PATH, "rb") as f:
     model = pickle.load(f)
 
-MODEL_FEATURES = list(model.feature_name_)
+MODEL_FEATURES = list(model.feature_names_in_)
 
 # ---------------- CORE FUNCTION ----------------
 def predict_gender(features: dict) -> dict:
